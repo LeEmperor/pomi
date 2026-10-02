@@ -208,3 +208,92 @@ let%expect_test "long break after every n sessions" =
   print_s [%sexp (phases : Pomi.Timer.Phase.t list)];
   [%expect {| (Short_break Work Short_break Work Short_break Work Long_break Work) |}]
 ;;
+
+let%expect_test "starting between clock ticks doesn't flash an extra second" =
+  let handle = create ~dimensions:{ width = 60; height = 14 } () in
+  advance handle 0.1;
+  key handle ' ';
+  Handle.show handle;
+  [%expect
+    {|
+    ┌────────────────────────────────────────────────────────────┐
+    │           ╭ pomi ──────────────────────────────╮           │
+    │           │                                    │           │
+    │           │               Focus                │           │
+    │           │                                    │           │
+    │           │               02:00                │           │
+    │           │                                    │           │
+    │           │   ──────────────────────────────   │           │
+    │           │                                    │           │
+    │           │              ○ ○ ○ ○               │           │
+    │           │                                    │           │
+    │           ╰────────────────────────────────────╯           │
+    │                                                            │
+    │                  0 pomodoros · 0m focused                  │
+    │          space start/pause  ·  r reset  ·  n skip          │
+    └────────────────────────────────────────────────────────────┘
+    |}]
+;;
+
+let%expect_test "-completed carries a streak over" =
+  let handle = create ~config:{ config with completed = 3 } () in
+  Handle.show handle;
+  [%expect
+    {|
+    ┌──────────────────────────────────────────────────────────────────────┐
+    │                                                                      │
+    │                ╭ pomi ──────────────────────────────╮                │
+    │                │                                    │                │
+    │                │       Focus  ·  press space        │                │
+    │                │                                    │                │
+    │                │   ██████ ██████    ██████ ██████   │                │
+    │                │   ██  ██     ██ ██ ██  ██ ██  ██   │                │
+    │                │   ██  ██ ██████    ██  ██ ██  ██   │                │
+    │                │   ██  ██ ██     ██ ██  ██ ██  ██   │                │
+    │                │   ██████ ██████    ██████ ██████   │                │
+    │                │                                    │                │
+    │                │   ──────────────────────────────   │                │
+    │                │                                    │                │
+    │                │              ● ● ● ○               │                │
+    │                │                                    │                │
+    │                ╰────────────────────────────────────╯                │
+    │                                                                      │
+    │                       3 pomodoros · 6m focused                       │
+    │               space start/pause  ·  r reset  ·  n skip               │
+    │                         +/- 1 min  ·  q quit                         │
+    │                                                                      │
+    │                                                                      │
+    └──────────────────────────────────────────────────────────────────────┘
+    |}];
+  key handle ' ';
+  advance handle 121.;
+  Handle.show handle;
+  [%expect
+    {|
+    ([write_string_to_tty] (string "\007"))
+    ┌──────────────────────────────────────────────────────────────────────┐
+    │                                                                      │
+    │                ╭ pomi ──────────────────────────────╮                │
+    │                │                                    │                │
+    │                │     Long break  ·  press space     │                │
+    │                │                                    │                │
+    │                │     ██   ██████    ██████ ██████   │                │
+    │                │   ████   ██     ██ ██  ██ ██  ██   │                │
+    │                │     ██   ██████    ██  ██ ██  ██   │                │
+    │                │     ██       ██ ██ ██  ██ ██  ██   │                │
+    │                │   ██████ ██████    ██████ ██████   │                │
+    │                │                                    │                │
+    │                │   ──────────────────────────────   │                │
+    │                │                                    │                │
+    │                │              ● ● ● ●               │                │
+    │                │                                    │                │
+    │                ╰────────────────────────────────────╯                │
+    │                                                                      │
+    │                       4 pomodoros · 8m focused                       │
+    │               space start/pause  ·  r reset  ·  n skip               │
+    │                         +/- 1 min  ·  q quit                         │
+    │                                                                      │
+    │                                                                      │
+    └──────────────────────────────────────────────────────────────────────┘
+    |}]
+;;

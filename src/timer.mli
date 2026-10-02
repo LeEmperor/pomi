@@ -23,7 +23,8 @@ type t =
   { phase : Phase.t
   ; status : Status.t
   ; length : Time_ns.Span.t (** Full length of the current phase, including adjustments *)
-  ; remaining : Time_ns.Span.t (** Only meaningful while not [Running] *)
+  ; remaining : Time_ns.Span.t
+  (** Time left while not [Running]; while [Running], time left when it started *)
   ; completed : int (** Work sessions finished (not skipped) *)
   ; focused : Time_ns.Span.t (** Total time spent in finished work sessions *)
   ; finished_phases : int (** Bumped whenever a phase runs out; drives the bell *)

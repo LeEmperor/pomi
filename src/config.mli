@@ -8,6 +8,8 @@ type t =
   ; auto_start : bool (** Start the next phase as soon as the current one finishes *)
   ; bell : bool (** Ring the terminal bell when a phase finishes *)
   ; set_title : bool (** Mirror the countdown in the terminal window title *)
+  ; completed : int
+  (** Work sessions already finished, e.g. carried over from another run *)
   }
 [@@deriving sexp_of]
 

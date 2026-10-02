@@ -32,7 +32,8 @@ type t =
   { phase : Phase.t
   ; status : Status.t
   ; length : Time_ns.Span.t (** Full length of the current phase, including adjustments *)
-  ; remaining : Time_ns.Span.t (** Only meaningful while not [Running] *)
+  ; remaining : Time_ns.Span.t
+  (** Time left while not [Running]; while [Running], time left when it started *)
   ; completed : int (** Work sessions finished (not skipped) *)
   ; focused : Time_ns.Span.t (** Total time spent in finished work sessions *)
   ; finished_phases : int (** Bumped whenever a phase runs out; drives the bell *)
@@ -45,15 +46,21 @@ let initial config =
   ; status = Ready
   ; length
   ; remaining = length
-  ; completed = 0
-  ; focused = Time_ns.Span.zero
+  ; completed = config.completed
+  ; focused = Time_ns.Span.scale_int config.work config.completed
   ; finished_phases = 0
   }
 ;;
 
 let remaining t ~now =
   match t.status with
-  | Running { ends_at } -> Time_ns.Span.max Time_ns.Span.zero (Time_ns.diff ends_at now)
+  | Running { ends_at } ->
+    (* The view's clock can lag the [now] that started the timer, so cap at the starting
+       value to keep the display from briefly counting up. *)
+    Time_ns.Span.clamp_exn
+      (Time_ns.diff ends_at now)
+      ~min:Time_ns.Span.zero
+      ~max:t.remaining
   | Ready | Paused -> t.remaining
 ;;
 
@@ -132,7 +139,11 @@ let apply (config : Config.t) t (action : Action.t) =
       let length = Time_ns.Span.(t.length + by) in
       match t.status with
       | Running { ends_at } ->
-        { t with length; status = Running { ends_at = Time_ns.add ends_at by } }
+        { t with
+          length
+        ; remaining = Time_ns.Span.(t.remaining + by)
+        ; status = Running { ends_at = Time_ns.add ends_at by }
+        }
       | Ready | Paused -> { t with length; remaining = updated })
   | Tick now ->
     (match t.status with
