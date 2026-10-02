@@ -1,0 +1,10 @@
+(library
+ (name pomi_test)
+ ; ppx_expect v0.18~preview drops the directory from a test file's path; point it at the
+ ; runner's cwd, where dune has copied the sources. Same workaround as jane/scaf.
+ (inline_tests
+  (flags
+   (:standard -source-tree-root .)))
+ (libraries bonsai_term bonsai_term_test bonsai_test core pomi)
+ (preprocess
+  (pps ppx_jane bonsai.ppx_bonsai ppx_expect)))

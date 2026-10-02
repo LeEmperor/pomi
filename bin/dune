@@ -1,0 +1,3 @@
+(executable
+ (name pomi)
+ (libraries pomi core core_unix.command_unix))
