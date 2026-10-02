@@ -57,10 +57,10 @@ module Palette = struct
            | Work -> Red
            | Short_break -> Green
            | Long_break -> Blue)
-    ; text = c Text
-    ; subtle = c Subtext0
-    ; faint = c Surface2
-    ; bg = c Base
+    ; text = Attr.Color.rgb ~r:255 ~g:176 ~b:0
+    ; subtle = Attr.Color.rgb ~r:192 ~g:128 ~b:0
+    ; faint = Attr.Color.rgb ~r:90 ~g:61 ~b:0
+    ; bg = Attr.Color.rgb ~r:0 ~g:0 ~b:0
     }
   ;;
 end
