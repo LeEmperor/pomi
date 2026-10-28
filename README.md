@@ -115,10 +115,7 @@ adjustments, long breaks, carried-over sessions, and compact rendering.
 | [`src/big_digits.ml`](src/big_digits.ml) | Block-digit font |
 | [`test/test_pomi.ml`](test/test_pomi.ml) | Expect tests for behavior and rendering |
 
-For consistent README captures, see the [screenshot guide](docs/SCREENSHOTS.md).
-
 ## Acknowledgments
 
-pomi started from the `bonsai_term_examples/pomodoro_timer` example in the
-author's local `jane` workspace. Its terminal interface uses Jane Street's
-Bonsai Term and the Bonsai Term border-box and color-scheme components.
+pomi started from the `bonsai_term_examples/pomodoro_timer`. Its terminal interface uses Jane Street's
+Bonsai Term and the Bonsai Term border-box and color-scheme components. Thanks to Sasha Skvortsov for bonsai examples. 
