@@ -1,0 +1,31 @@
+opam-version: "2.0"
+synopsis: "A keyboard-driven Pomodoro timer for the terminal"
+description: """
+A Bonsai Term timer with large block digits, focus and break phases,
+a progress bar, and session totals.
+"""
+maintainer: "LeEmperor"
+authors: "LeEmperor"
+homepage: "https://github.com/LeEmperor/pomi"
+bug-reports: "https://github.com/LeEmperor/pomi/issues"
+dev-repo: "git+https://github.com/LeEmperor/pomi.git"
+depends: [
+  "ocaml-variants" {= "5.2.0+ox"}
+  "dune" {>= "3.17"}
+  "async" {= "v0.18~preview.130.106+341"}
+  "bonsai" {= "v0.18~preview.130.106+341"}
+  "bonsai_term" {= "v0.18~preview.130.106+341"}
+  "bonsai_term_components" {= "v0.18~preview.130.106+341"}
+  "core" {= "v0.18~preview.130.106+341"}
+  "core_unix" {= "v0.18~preview.130.106+341"}
+  "ppx_jane" {= "v0.18~preview.130.106+341"}
+  "bonsai_term_test" {with-test & = "v0.18~preview.130.106+341"}
+  "bonsai_test" {with-test & = "v0.18~preview.130.106+341"}
+  "ppx_expect" {with-test & = "v0.18~preview.130.106+341"}
+]
+build: [
+  ["dune" "build" "-p" name "-j" jobs]
+]
+run-test: [
+  ["dune" "runtest" "-p" name "-j" jobs]
+]

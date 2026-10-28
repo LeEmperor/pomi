@@ -1,3 +1,4 @@
 (executable
  (name pomi)
+ (public_name pomi)
  (libraries pomi core core_unix.command_unix))
