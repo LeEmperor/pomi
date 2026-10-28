@@ -3,6 +3,8 @@
 A little Pomodoro timer for the terminal, built with OCaml and
 [Bonsai Term](https://github.com/janestreet/bonsai_term).
 
+<img width="2494" height="1380" alt="image" src="https://github.com/user-attachments/assets/c921bf34-e189-4d7b-99c7-3ed6431839bf" />
+
 Big block digits, a progress bar, and keyboard controls for keeping a focus
 session moving.
 
